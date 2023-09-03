@@ -35,7 +35,6 @@ class ProductManager {
   }
 }
 
-// Ejemplo de uso:
 const productManager = new ProductManager();
 
 productManager.addProduct({
