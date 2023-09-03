@@ -40,7 +40,7 @@ const productManager = new ProductManager();
 productManager.addProduct({
   title: "Producto 1",
   description: "Descripción del producto 1",
-  price: 19.99,
+  price: 264,
   thumbnail: "imagen1.jpg",
   code: "ABC123",
   stock: 10
@@ -49,9 +49,9 @@ productManager.addProduct({
 productManager.addProduct({
   title: "Producto 2",
   description: "Descripción del producto 2",
-  price: 29.99,
+  price: 142.65,
   thumbnail: "imagen2.jpg",
-  code: "XYZ456",
+  code: "123ABC",
   stock: 5
 });
 
