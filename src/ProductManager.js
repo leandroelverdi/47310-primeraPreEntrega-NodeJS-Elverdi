@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 
 class ProductManager {
   constructor(path) {
@@ -8,24 +8,12 @@ class ProductManager {
   async addProduct(product) {
     try {
       const products = await this.getProducts();
+      const someProduct = products.some(
+        (existingProduct) => existingProduct.code === product.code
+      );
 
-      if (
-        !product.title ||
-        !product.description ||
-        !product.price ||
-        !product.thumbnail ||
-        !product.code ||
-        !product.stock
-      ) {
-        return "Todos los campos son obligatorios.";
-      }
-
-      if (
-        products.some(
-          (existingProduct) => existingProduct.code === product.code
-        )
-      ) {
-        return "El campo 'code' ya existe para otro producto.";
+      if (someProduct) {
+        return -1;
       }
 
       let id = 1;
@@ -35,13 +23,12 @@ class ProductManager {
 
       products.push({ id, ...product });
       await fs.promises.writeFile(this.path, JSON.stringify(products));
-      return console.log(`Producto "${product.title}" agregado con éxito.`);
     } catch (error) {
       return error;
     }
   }
 
-  async getProducts() {
+  async getProducts(limit) {
     try {
       if (fs.existsSync(this.path)) {
         const products = await fs.promises.readFile(this.path, "utf-8");
@@ -61,10 +48,12 @@ class ProductManager {
       );
 
       if (productIndex !== -1) {
-        products[productIndex] = { ...products[productIndex], ...productObj };
+        const product = products[productIndex];
+        products = { ...product, ...productObj };
 
         await fs.promises.writeFile(this.path, JSON.stringify(products));
-        return console.log("Producto actualizado correctamente");
+      } else {
+        return -1;
       }
     } catch (error) {
       return error;
@@ -74,6 +63,10 @@ class ProductManager {
   async deleteProduct(idProduct) {
     try {
       const products = await this.getProducts();
+      const product = products.find((product) => product.id === idProduct);
+      if (!product) {
+        return -1;
+      }
 
       const existProduct = products.findIndex(
         (product) => product.id === idProduct
@@ -84,7 +77,8 @@ class ProductManager {
           (product) => product.id !== idProduct
         );
         await fs.promises.writeFile(this.path, JSON.stringify(newArrayProduct));
-        return console.log("Producto eliminado correctamente");
+        console.log("Producto eliminado correctamente");
+        return 1;
       } else {
         return console.log("El producto que desea eliminar no existe");
       }
@@ -97,39 +91,11 @@ class ProductManager {
     try {
       const products = await this.getProducts();
       const product = products.find((product) => product.id === idProduct);
-
-      if (product) {
-        return product;
-      } else {
-        return console.log("Producto no encontrado.");
-      }
+      return product;
     } catch (error) {
       return error;
     }
   }
 }
 
-const myFunction = async () => {
-  const productManager = new ProductManager("data.json");
-
-  console.log(await productManager.getProducts());
-
-  await productManager.addProduct({
-    title: "producto prueba",
-    description: "Este es un producto prueba",
-    price: 200,
-    thumbnail: "Sin imagen",
-    code: "ABC123",
-    stock: 25,
-  });
-
-  console.log(await productManager.getProducts());
-
-  await productManager.getProductById(1);
-
-  await productManager.updateProduct(1, { title: "Titulo actualizado" });
-  
-  await productManager.deleteProduct(1);
-};
-
-myFunction();
+export const productManager = new ProductManager("data.json");

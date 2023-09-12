@@ -1,0 +1,93 @@
+import { productManager } from "./ProductManager.js";
+import express from "express";
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.get("/products", async (req, res) => {
+  const { limit } = req.query;
+  try {
+    const products = await productManager.getProducts();
+    if (!products.length) {
+      res.status(200).json({ message: "No products found" });
+    }
+    if (!limit) {
+      res.status(200).json({ message: "Products found", products });
+    } else if (limit > 0) {
+      const productsWithLimit = products.slice(0, limit);
+      res
+        .status(200)
+        .json({ message: "Products found with limit", productsWithLimit });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+});
+
+app.get("/products/:pid", async (req, res) => {
+  const { pid } = req.params;
+  try {
+    const product = await productManager.getProductById(+pid);
+    if (!product) {
+      res.status(400).json({ message: "Product not found with the id sent" });
+    } else {
+      res.status(200).json({ message: "Product found", product });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+});
+
+app.post("/products", async (req, res) => {
+  const { title, description, price, thumbnail, code, stock } = req.body;
+  try {
+    if (!title || !description || !price || !thumbnail || !code || !stock) {
+      res.status(403).json({
+        message:
+          "The object must be contain the following parameters: title, description, price, thumbnail, code, stock.",
+      });
+    } else {
+      const newProduct = await productManager.addProduct(req.body);
+
+      if (newProduct === -1) {
+        res.status(403).json({
+          message: "the field 'code' already exist in another product",
+        });
+      } else {
+        res
+          .status(200)
+          .json({ message: `The product '${title}' was added successfully` });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+});
+
+app.delete("/products/:pid", async (req, res) => {
+  const { pid } = req.params;
+  try {
+    const response = await productManager.deleteProduct(+pid);
+    if (response === -1) {
+      res.status(400).json({ message: "Product not found with the id sent" });
+    } else {
+      res.status(200).json({ message: "Product deleted" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+});
+
+app.put("/products/:pid", async (req, res) => {
+  const { pid } = req.params;
+  try {
+    await productManager.updateProduct(pid, req.body);
+    res.status(200).json({ message: "product updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+});
+
+app.listen(8080, () => {
+  console.log("Listening in port: 8080");
+});
