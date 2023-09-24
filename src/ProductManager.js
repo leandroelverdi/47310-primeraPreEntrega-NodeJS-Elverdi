@@ -98,4 +98,4 @@ class ProductManager {
   }
 }
 
-export const productManager = new ProductManager("data.json");
+export const productManager = new ProductManager("productos.json");
