@@ -1,28 +1,32 @@
+// const someProduct = products.some(
+//   (existingProduct) => existingProduct.code === product.code
+// );
+
+// if (someProduct) {
+//   return -1;
+// }
+
 import fs from "fs";
+import { __dirname } from "./utils.js";
 
 class ProductManager {
   constructor(path) {
-    this.path = path;
+    this.path = __dirname + path;
   }
 
   async addProduct(product) {
     try {
-      const products = await this.getProducts();
-      const someProduct = products.some(
-        (existingProduct) => existingProduct.code === product.code
-      );
-
-      if (someProduct) {
-        return -1;
-      }
-
-      let id = 1;
-      if (products.length > 0) {
+      const products = await this.getProducts({});
+      let id;
+      if (!products.length) {
+        id = 1;
+      } else {
         id = products[products.length - 1].id + 1;
       }
-
-      products.push({ id, ...product });
+      const newProduct = { id, ...product };
+      products.push(newProduct);
       await fs.promises.writeFile(this.path, JSON.stringify(products));
+      return newProduct;
     } catch (error) {
       return error;
     }
@@ -98,4 +102,4 @@ class ProductManager {
   }
 }
 
-export const productManager = new ProductManager("productos.json");
+export const productManager = new ProductManager("/ProductsFile.json");
