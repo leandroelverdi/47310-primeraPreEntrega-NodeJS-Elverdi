@@ -2,11 +2,11 @@
   <h2>Add product</h2>
   <form id="form">
     Titulo:
-    <input id="title"  type="text" name="title" />
+    <input id="title" type="text" name="title" />
     Descripción:
     <input id="description" type="text" name="description" />
     Precio:
-    <input id="price" type="number" name="price"  />
+    <input id="price" type="number" name="price" />
     <input type="submit" value="Crear" />
   </form>
 </div>
@@ -26,7 +26,7 @@
         <td>{{id}}</td>
         <td>{{title}}</td>
         <td>{{description}}</td>
-        <td>{{price}}</td>
+        <td>${{price}}</td>
       </tr>
     {{/each}}
   </tbody>

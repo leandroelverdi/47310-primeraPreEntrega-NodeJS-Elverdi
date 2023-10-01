@@ -3,6 +3,7 @@ const form = document.getElementById("form");
 const inputTitle = document.getElementById("title");
 const inputDescription = document.getElementById("description");
 const inputPrice = document.getElementById("price");
+const table = document.getElementById("table");
 const tableBody = document.getElementById("tableBody");
 
 form.onsubmit = (e) => {
@@ -19,10 +20,10 @@ socketClient.on("productCreated", (product) => {
   const { id, title, description, price } = product;
   const row = `
   <tr>
-    <td>${id}</td>
-    <td>${title}</td>
-    <td>${description}</td>
-    <td>${price}</td>
+  <td>${id}</td>
+  <td>${title}</td>
+  <td>${description}</td>
+  <td>$${price}</td>
   </tr>`;
 
   tableBody.innerHTML += row;

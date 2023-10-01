@@ -25,7 +25,7 @@ const httpServer = app.listen(PORT, () => {
 const socketServer = new Server(httpServer);
 
 socketServer.on("connection", (socket) => {
-  console.log(`Cliente conectado ${socket.id}`);
+  console.log("Cliente conectado");
 
   socket.on("createProduct", async (product) => {
     const newProduct = await productManager.addProduct(product);

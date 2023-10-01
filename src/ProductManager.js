@@ -1,11 +1,3 @@
-// const someProduct = products.some(
-//   (existingProduct) => existingProduct.code === product.code
-// );
-
-// if (someProduct) {
-//   return -1;
-// }
-
 import fs from "fs";
 import { __dirname } from "./utils.js";
 
@@ -67,22 +59,21 @@ class ProductManager {
   async deleteProduct(idProduct) {
     try {
       const products = await this.getProducts();
-      const product = products.find((product) => product.id === idProduct);
+      const product = products.find((product) => product.id === +idProduct);
       if (!product) {
         return -1;
       }
 
       const existProduct = products.findIndex(
-        (product) => product.id === idProduct
+        (product) => product.id === +idProduct
       );
 
       if (existProduct !== -1) {
         const newArrayProduct = products.filter(
-          (product) => product.id !== idProduct
+          (product) => product.id !== +idProduct
         );
         await fs.promises.writeFile(this.path, JSON.stringify(newArrayProduct));
-        console.log("Producto eliminado correctamente");
-        return 1;
+        return product;
       } else {
         return console.log("El producto que desea eliminar no existe");
       }
