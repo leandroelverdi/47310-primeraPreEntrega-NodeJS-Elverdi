@@ -4,20 +4,9 @@ import { productManager } from "../ProductManager.js";
 const router = Router();
 
 router.get("/", async (req, res) => {
-  // const { limit } = req.query;
   try {
     const products = await productManager.getProducts();
-    // if (!products.length) {
-    //   res.status(200);
-    // }
-    // if (!limit) {
-      res.render("home", { products });
-    // } else if (limit > 0) {
-    //   const productsWithLimit = products.slice(0, limit);
-    //   res
-    //     .status(200)
-    //     .json({ message: "Products found with limit", productsWithLimit });
-    // }
+    res.render("home", { products });
   } catch (error) {
     res.status(500).json({ message: error });
   }

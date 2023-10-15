@@ -1,36 +1,55 @@
-<div>
-  <h2>Add product</h2>
-  <form id="form">
-    Titulo:
-    <input id="title" type="text" name="title" />
-    Descripción:
-    <input id="description" type="text" name="description" />
-    Precio:
-    <input id="price" type="number" name="price" />
-    <input type="submit" value="Crear" />
-  </form>
-</div>
+<main>
+  <section class="realtime__section">
+    <h1 class="realtime__title">add product in real time</h1>
 
-<table id="table">
-  <thead>
-    <tr>
-      <th>Id</th>
-      <th>Titulo</th>
-      <th>Descripción</th>
-      <th>Precio</th>
-    </tr>
-  </thead>
-  <tbody id="tableBody">
-    {{#each products}}
-      <tr>
-        <td>{{id}}</td>
-        <td>{{title}}</td>
-        <td>{{description}}</td>
-        <td>${{price}}</td>
-      </tr>
-    {{/each}}
-  </tbody>
-</table>
+    <form class="form" id="form">
+      <input
+        class="input__text"
+        id="title"
+        type="text"
+        name="title"
+        placeholder="title"
+      />
+      <input
+        class="input__text"
+        id="price"
+        type="number"
+        name="price"
+        placeholder="price"
+      />
+      <textarea
+        class="text__area"
+        name="description"
+        id="description"
+        cols="30"
+        rows="10"
+        placeholder="description"
+      ></textarea>
 
+      <input type="submit" value="create" />
+    </form>
+
+    <table class="table" id="table">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Titulo</th>
+          <th>Precio</th>
+          <th>Descripción</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        {{#each products}}
+          <tr>
+            <td>{{id}}</td>
+            <td>{{title}}</td>
+            <td>${{price}}</td>
+            <td>{{description}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </section>
+</main>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/index.js"></script>

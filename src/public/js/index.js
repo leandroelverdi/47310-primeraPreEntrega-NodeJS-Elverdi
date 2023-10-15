@@ -1,4 +1,5 @@
 const socketClient = io();
+
 const form = document.getElementById("form");
 const inputTitle = document.getElementById("title");
 const inputDescription = document.getElementById("description");
